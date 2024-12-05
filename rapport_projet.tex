@@ -1,0 +1,214 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{float}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Rapport Projet: Simulation de Distillation Multicomposant},
+    pdfauthor={Projet Distillation}
+}
+
+\lstset{
+    frame=tb,
+    language=Python,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    numbers=none,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3
+}
+
+\title{Simulation de Distillation Multicomposant\\
+       \large Rapport Détaillé du Projet}
+\author{Projet de Génie des Procédés}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\chapter{Introduction}
+\section{Contexte du Projet}
+Ce projet vise à développer un simulateur complet de distillation multicomposant, intégrant des méthodes de calcul avancées et une simulation dynamique. Le simulateur permet l'analyse et l'optimisation des colonnes de distillation, avec une attention particulière portée aux aspects thermodynamiques et au contrôle de procédé.
+
+\section{Objectifs}
+\begin{itemize}
+    \item Développer un modèle thermodynamique robuste
+    \item Implémenter différentes méthodes de calcul (FUG et matricielle)
+    \item Créer une simulation dynamique avec contrôle
+    \item Fournir des outils de visualisation interactifs
+\end{itemize}
+
+\chapter{Architecture du Projet}
+\section{Structure des Fichiers}
+\begin{verbatim}
+multicomponent_distillation/
+├── methode_fug/
+│   ├── physical_properties.py
+│   ├── activity_models.py
+│   └── equations_of_state.py
+├── methode_matricielle/
+│   └── matrix_solver.py
+├── simulation_dynamique/
+│   ├── dynamic_model.py
+│   ├── control_system.py
+│   └── dynamic_visualization.py
+├── interface/
+│   └── advanced_visualization.py
+└── requirements.txt
+\end{verbatim}
+
+\chapter{Modèles Thermodynamiques}
+\section{Propriétés Physiques}
+Le module \texttt{physical\_properties.py} gère:
+\begin{itemize}
+    \item Calcul des pressions de vapeur
+    \item Estimation des capacités calorifiques
+    \item Propriétés critiques
+    \item Fonctions de départ
+\end{itemize}
+
+\section{Modèles d'Activité}
+Le module \texttt{activity\_models.py} implémente:
+\begin{itemize}
+    \item Modèle de Wilson
+    \item Modèle NRTL
+    \item Modèle UNIQUAC
+    \item Préparation pour UNIFAC
+\end{itemize}
+
+\section{Équations d'État}
+Le module \texttt{equations\_of\_state.py} contient:
+\begin{itemize}
+    \item Équation de Peng-Robinson
+    \item Équation de Soave-Redlich-Kwong
+    \item Règles de mélange
+    \item Calculs des fonctions de départ
+\end{itemize}
+
+\chapter{Méthodes de Calcul}
+\section{Méthode FUG}
+La méthode FUG (Fugacité) permet:
+\begin{itemize}
+    \item Calcul rigoureux des équilibres liquide-vapeur
+    \item Prise en compte des non-idéalités
+    \item Calcul des coefficients de fugacité
+\end{itemize}
+
+\section{Méthode Matricielle}
+La méthode matricielle offre:
+\begin{itemize}
+    \item Résolution simultanée des équations de bilan
+    \item Convergence rapide
+    \item Adaptation aux systèmes multicomposants
+\end{itemize}
+
+\chapter{Simulation Dynamique}
+\section{Modèle Dynamique}
+Le module \texttt{dynamic\_model.py} implémente:
+\begin{itemize}
+    \item Bilans de matière dynamiques
+    \item Bilans d'énergie
+    \item Calculs d'équilibre en temps réel
+    \item Gestion des perturbations
+\end{itemize}
+
+\section{Système de Contrôle}
+Le module \texttt{control\_system.py} fournit:
+\begin{itemize}
+    \item Contrôleurs PID
+    \item Auto-tuning des paramètres
+    \item Analyse des performances
+    \item Gestion des points de consigne
+\end{itemize}
+
+\section{Visualisation Dynamique}
+Le module \texttt{dynamic\_visualization.py} permet:
+\begin{itemize}
+    \item Visualisation interactive des profils
+    \item Animation des simulations
+    \item Suivi des variables de contrôle
+    \item Export des résultats
+\end{itemize}
+
+\chapter{Interface Utilisateur}
+\section{Visualisation Avancée}
+L'interface offre:
+\begin{itemize}
+    \item Diagrammes McCabe-Thiele
+    \item Courbes de résidu
+    \item Analyses de sensibilité
+    \item Visualisation 3D des profils
+\end{itemize}
+
+\chapter{Exemples d'Utilisation}
+\section{Simulation Statique}
+\begin{lstlisting}
+# Configuration du système
+system = DistillationSystem()
+system.add_component("ethanol")
+system.add_component("water")
+
+# Calcul d'équilibre
+results = system.calculate_equilibrium(
+    T=350,  # K
+    P=101325  # Pa
+)
+\end{lstlisting}
+
+\section{Simulation Dynamique}
+\begin{lstlisting}
+# Configuration de la simulation
+model = DynamicDistillationModel()
+model.setup_column({
+    'n_stages': 20,
+    'feed_stage': 10,
+    'components': ['ethanol', 'water']
+})
+
+# Exécution de la simulation
+results = model.solve_dynamic_simulation(
+    t_span=(0, 3600),
+    initial_state=initial_conditions
+)
+\end{lstlisting}
+
+\chapter{Conclusion}
+\section{Résumé des Fonctionnalités}
+Le projet fournit un ensemble complet d'outils pour:
+\begin{itemize}
+    \item La modélisation thermodynamique
+    \item Le calcul des équilibres
+    \item La simulation dynamique
+    \item Le contrôle de procédé
+    \item La visualisation des résultats
+\end{itemize}
+
+\section{Perspectives}
+Développements futurs envisagés:
+\begin{itemize}
+    \item Implémentation complète de UNIFAC
+    \item Optimisation des performances
+    \item Interface web interactive
+    \item Intégration de l'apprentissage automatique
+\end{itemize}
+
+\end{document}
